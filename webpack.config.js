@@ -19,9 +19,9 @@ const parts  = require('./lib/parts');
 // ---------------------------------------------------
 
 var PATHS = {
-  app:   path.join(__dirname, 'app'),
-  style: path.join(__dirname, 'app', './scss/app.scss'),
-  build: path.join(__dirname, '../public/')
+  app:   path.join(__dirname, './app'),
+  style: path.join(__dirname, './app', 'scss/app.scss'),
+  build: path.join(__dirname, 'dist')
 };
 
 // ---------------------------------------------------
@@ -83,9 +83,9 @@ switch(process.env.npm_lifecycle_event) {
       {
         devtool: 'source-map',
         output: {
-          path: PATHS.build,
+          path: path.join(__dirname, 'dist'),
           filename: '[name].js'
-        }
+        },
       },
       parts.clean(PATHS.build),
       parts.setFreeVariable(

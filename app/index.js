@@ -31,7 +31,7 @@ const store      = middleware(createStore, applyMiddleware)(rootReducer);
 const history    = syncHistoryWithStore(hashHistory, store);
 
 //_Start at Top_______________________________________
-const goToTop = () => { window.scrollTo(0, 0) }
+const goToTop = () => { window.scrollTo(0, 0) };
 store.subscribe(() => { console.log(store.getState()) });
 
 // ---------------------------------------------------

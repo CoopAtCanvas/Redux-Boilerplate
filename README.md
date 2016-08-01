@@ -26,6 +26,12 @@ $ npm start
 ```
 Runs the project in development mode with hot-reloading of the `app` folder. [http://localhost:3000](http://localhost:3000).
 
+## Production
+```
+$ npm run build
+```
+Compiles the project into the dist folder for production.
+
 ## Linting
 ```
 $ npm i -g eslint
