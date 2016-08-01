@@ -1,0 +1,211 @@
+// ======================================================================================================
+//
+// Mixins
+//
+// ======================================================================================================
+
+// --------------------------------------------------
+// Fonts
+// --------------------------------------------------
+
+@mixin declare-font-face($font-family, $font-filename, $font-weight : normal, $font-style :normal, $font-stretch : normal) {
+  @font-face {
+    font-family: '#{$font-family}';
+    src: url('#{$font-filename}.eot');
+    src: url('#{$font-filename}.eot?#iefix') format('embedded-opentype'),
+    url('#{$font-filename}.woff') format('woff'),
+    url('#{$font-filename}.ttf') format('truetype'),
+    url('#{$font-filename}.svg##{$font-family}') format('svg');
+    font-style: $font-style;
+    font-stretch: $font-stretch;
+    font-weight: $font-weight;
+  }
+}
+
+// --------------------------------------------------
+// Utils
+// --------------------------------------------------
+
+// Clearfix Mixin
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+// Center-align a block level element
+@mixin center-block() {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// Sizing shortcuts
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin square($size) {
+  @include size($size, $size);
+}
+
+// --------------------------------------------------
+// Positioning
+// --------------------------------------------------
+
+@mixin center-all($position: absolute, $top: 0, $right: 0, $bottom: 0, $left: 0){
+  bottom: $bottom;
+  left: $left;
+  margin: auto;
+  position: $position;
+  right: $right;
+  top: $top;
+}
+
+@mixin v-align($position: relative) {
+  position: $position;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+// --------------------------------------------------
+// Buttons
+// --------------------------------------------------
+
+@mixin button($bg-color, $height, $color: $white, $padding: $font-family-default, $width: auto ) {
+  background-color: $bg-color;
+  color: $color;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 $padding;
+  height: $height;
+  line-height: $height;
+  width: $width;
+
+  &:hover,
+  &:active,
+  &:focus  { color: $color; }
+
+  &:hover  { background-color: mix(white, $bg-color, 15%); }
+  &:focus,
+  &:active { background-color: mix(black, $bg-color, 15%); }
+}
+
+// ------------------------------------------------
+// Font Styles
+// ------------------------------------------------
+
+@mixin font-smoothing() {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin truncate-text() {
+  overflow-x: hidden;
+  overflow-y: visible;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ------------------------------------------------
+// Ratios
+// ------------------------------------------------
+
+@mixin aspect-ratio($width, $height) {
+  position: relative;
+  &:before {
+    content: "";
+    display: block;
+    padding-top: ($height / $width) * 100%;
+    width: 100%;
+  }
+  > .content {
+    @include center-all();
+  }
+}
+
+@mixin aspect-ratio-grid($fallback, $divisions) {
+  height: 0;
+  padding-bottom: calc(100% / #{$divisions});
+  padding-bottom: $fallback;
+  width: $fallback;
+  width: calc(100% / #{$divisions});
+}
+
+@function calc-percent($target, $container) {
+  @return ($target / $container) * 100%;
+}
+
+@function cp($target, $container) {
+  @return calc-percent($target, $container);
+}
+
+// --------------------------------------------------
+// Responsive Breakpoints
+// --------------------------------------------------
+
+$breakpoints: (
+  'xs':  ( max-width: $break-sm - 1 ),
+  'sm':  ( min-width: $break-sm  ),
+  'md':  ( min-width: $break-md  ),
+  'lg':  ( min-width: $break-lg  ),
+  'xl':  ( min-width: $break-xl  ),
+  'xxl': ( min-width: $break-xxl )
+);
+
+@mixin breakpoint($name) {
+  @media #{inspect(map-get($breakpoints, $name))} {
+    @content;
+  }
+}
+
+// --------------------------------------------------
+// Keyframe
+// --------------------------------------------------
+
+@mixin animation($animate...) {
+    $max: length($animate);
+    $animations: '';
+
+    @for $i from 1 through $max {
+        $animations: #{$animations + nth($animate, $i)};
+
+        @if $i < $max {
+            $animations: #{$animations + ", "};
+        }
+    }
+    -webkit-animation: $animations;
+    -moz-animation:    $animations;
+    -o-animation:      $animations;
+    animation:         $animations;
+}
+
+@mixin keyframes($animationName) {
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName} {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
+
+// --------------------------------------------------
+// Rem Calculator
+// --------------------------------------------------
+
+@mixin font-size($sizeValue) {
+  font-size: ($sizeValue * 10) + px;
+  font-size: $sizeValue + rem;
+}
